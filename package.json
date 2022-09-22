@@ -1,0 +1,19 @@
+{
+  "name": "lerna-test",
+  "version": "1.0.0",
+  "description": "lerna dev",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^5.5.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
