@@ -1,6 +1,6 @@
 {
-  "name": "@imooc-cli-dev/core",
-  "version": "0.0.0",
+  "name": "@imooc-cli/core",
+  "version": "1.0.4",
   "description": "wzw-cli-dev core",
   "author": "wuzhongwei <94050803@qq.com>",
   "homepage": "",
@@ -23,7 +23,8 @@
     "test": "node ./__tests__/core.test.js"
   },
   "dependencies": {
-    "@wzw-cli-dev/log": "file:../../utils/log",
+    "@imooc-cli-dev/log": "file:../../utils/log",
+    "@imooc-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "colors": "^1.4.0",
     "dotenv": "^16.0.2",
     "import-local": "^3.1.0",

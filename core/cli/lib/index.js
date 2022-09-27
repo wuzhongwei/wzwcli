@@ -2,15 +2,15 @@
 
 module.exports = core;
 const path = require('path')
-const semvewr = require('semver')
+const semver = require('semver')
 const colors = require('colors/safe')
 const userHome = require('user-home')
 const pathExists = require('path-exists').sync
-const log = require('@wzw-cli-dev/log')
+const log = require('@imooc-cli-dev/log')
 const pkg = require('../package.json')
 const constant = require('./const')
-let args, config;
-function core() {
+let args;
+async function core() {
   try{
     checkPkgVersion()
     checkNodeVersion()
@@ -18,13 +18,23 @@ function core() {
     checkUserHome()
     checkInputArgs()
     checkEnv()
-    // log.verbose('debug', 'test debug log')
+    await checkGlobalUpdate()
   }catch(e){
     log.error(e.message)
   }
   
 }
-
+// 更新版本号
+async function checkGlobalUpdate() {
+  const currentVersion = pkg.version
+  const npmName = pkg.name
+  const {getNpmSemverVersion} = require('@imooc-cli-dev/get-npm-info')
+  const lastVersion = await getNpmSemverVersion(currentVersion, npmName)
+  if (lastVersion && semver.gt(lastVersion, currentVersion)) {
+    log.warn('更新提示', colors.yellow(`请手动更新 ${npmName}, 当前版本: ${currentVersion}, 最新版本: ${lastVersion}更新命令：npm install -g ${npmName}`))
+  }
+  console.log('lastVersion', lastVersion, currentVersion)
+}
 // 环境变量检查功能开发
 function checkEnv() {
   const dotenv = require('dotenv')
@@ -83,7 +93,7 @@ function checkPkgVersion() {
 function checkNodeVersion() {
   const currentVersion = process.version
   const lowestVersion = constant.LOWSET_NODE_VERSION
-  if (!semvewr.gte(currentVersion, lowestVersion)) {
+  if (!semver.gte(currentVersion, lowestVersion)) {
     throw new Error(colors.red(`imooc-cli 需要安装 v${lowestVersion} 以上版本Node,js`))
   }
 }
