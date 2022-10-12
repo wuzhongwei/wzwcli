@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = core;
+const commander = require('commander')
 const path = require('path')
 const semver = require('semver')
 const colors = require('colors/safe')
@@ -8,22 +9,16 @@ const userHome = require('user-home')
 const pathExists = require('path-exists').sync
 const log = require('@imooc-cli-dev/log')
 const init = require('@imooc-cli-dev/init')
+const exec = require('@imooc-cli-dev/exec')
 const pkg = require('../package.json')
 const constant = require('./const')
-const commander = require('commander')
-let args;
+
 
 const program = new commander.Command()
 const options = program.opts()
 async function core() {
   try{
-    checkPkgVersion()
-    checkNodeVersion()
-    checkRoot()
-    checkUserHome()
-    // checkInputArgs()
-    checkEnv()
-    await checkGlobalUpdate()
+    await prepare()
     registerCommand()
   }catch(e){
     log.error(e.message)
@@ -39,11 +34,12 @@ function registerCommand() {
     .usage('<command> [options]')
     .version(pkg.version)
     .option('-d, --debug', '是否开启调试模式', false)
+    .option('-tp, --targetPath <targetPath>', '是否指定本地调试文件路径', '')
 
   program
     .command('init [projectName]')
     .option('-f, --force', '是否强制初始化项目')
-    .action(init)
+    .action(exec)
   
   // 开启debug模式
   program.on('option:debug', function() {
@@ -53,6 +49,11 @@ function registerCommand() {
       process.env.LOG_LEVEL = 'info'
     }
     log.level = process.env.LOG_LEVEL
+  })
+
+  // 指定targetPath
+  program.on('option:targetPath', function() {
+    process.env.CLI_TARGET_PATH = options.targetPath
   })
 
   // 对未知命令监听
@@ -72,6 +73,16 @@ function registerCommand() {
   }
 
 }
+
+async function prepare() {
+  checkPkgVersion()
+  checkNodeVersion()
+  checkRoot()
+  checkUserHome()
+  checkEnv()
+  await checkGlobalUpdate()
+}
+
 // 更新版本号
 async function checkGlobalUpdate() {
   const currentVersion = pkg.version
@@ -93,7 +104,6 @@ function checkEnv() {
     })
   }
   createDefaultConfig()
-  log.verbose('环境变量', process.env.CLI_HOME_PATH)
 }
 function createDefaultConfig() {
   const cliConfig = {
@@ -107,20 +117,6 @@ function createDefaultConfig() {
   process.env.CLI_HOME_PATH = cliConfig.cliHome
 }
 
-// 检查入参
-function checkInputArgs() {
-  const minimist = require('minimist')
-  args = minimist(process.argv.slice(2))
-  checkArgs()
-}
-function checkArgs() {
-  if (args.debug) {
-    process.env.LOG_LEVEL = 'verbose'
-  } else {
-    process.env.LOG_LEVEL = 'info'
-  }
-  log.level = process.env.LOG_LEVEL
-}
 // 检查用户主目录
 function checkUserHome() {
   if (!userHome || !pathExists(userHome)) {
