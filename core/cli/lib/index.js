@@ -22,6 +22,9 @@ async function core() {
     registerCommand()
   }catch(e){
     log.error(e.message)
+    if (program.debug) {
+      console.log(e)
+    }
   }
   
 }
@@ -93,6 +96,7 @@ async function checkGlobalUpdate() {
     log.warn('更新提示', colors.yellow(`请手动更新 ${npmName}, 当前版本: ${currentVersion}, 最新版本: ${lastVersion}更新命令：npm install -g ${npmName}`))
   }
 }
+
 // 环境变量检查功能开发
 function checkEnv() {
   const dotenv = require('dotenv')
@@ -109,6 +113,7 @@ function createDefaultConfig() {
   const cliConfig = {
     home: userHome
   }
+
   if (process.env.CLI_HOME) {
     cliConfig['cliHome'] = path.join(userHome, process.env.CLI_HOME)
   } else {

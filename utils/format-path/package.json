@@ -1,7 +1,7 @@
 {
-  "name": "@imooc-cli-dev/exec",
+  "name": "@imooc-cli-dev/format-path",
   "version": "1.0.0",
-  "description": "imooc-cli-dev execute package",
+  "description": "format path",
   "author": "wuzhongwei <94050803@qq.com>",
   "homepage": "https://github.com/wuzhongwei/wzwcli#readme",
   "license": "ISC",
@@ -21,13 +21,9 @@
     "url": "git+https://github.com/wuzhongwei/wzwcli.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@imooc-cli-dev/exec.test.js"
+    "test": "node ./__tests__/@imooc-cli-dev/format-path.test.js"
   },
   "bugs": {
     "url": "https://github.com/wuzhongwei/wzwcli/issues"
-  },
-  "dependencies": {
-    "@imooc-cli-dev/package": "file:../../models/package",
-    "@imooc-cli-dev/log": "file:../../utils/log"
   }
 }
