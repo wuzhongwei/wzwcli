@@ -21,7 +21,7 @@ async function exec() {
 
   const cmdName = cmdObj.name()
   const packageName = SETTINGS[cmdName]
-  const packageVersion = 'latest'
+  const packageVersion = 'latest' // 默认安装版本
   
 
   if (!targetPath) {
@@ -35,8 +35,9 @@ async function exec() {
       packageVersion,
       storeDir
     })
-    if (pkg.exists()) {
+    if (await pkg.exists()) {
       // 更新package
+      await pkg.update()
     } else {
       await pkg.install()
       // 安装package
@@ -49,6 +50,7 @@ async function exec() {
     })
   }
   const rootFile = pkg.getRootFilePath()
+  console.log('rootFile', rootFile)
   if (rootFile) {
     require(rootFile).apply(null, arguments)
   }

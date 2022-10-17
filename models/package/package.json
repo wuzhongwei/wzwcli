@@ -28,9 +28,11 @@
   },
   "dependencies": {
     "@imooc-cli-dev/format-path": "file:../../utils/format-path",
-    "@imooc-cli-dev/utils": "file:../../utils/utils",
     "@imooc-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "@imooc-cli-dev/utils": "file:../../utils/utils",
+    "fs-extra": "^9.0.1",
     "npminstall": "^4.10.0",
-    "pkg-dir": "^5.0.0"
+    "path-exists": "^4.0.0",
+    "pkg-dir": "^4.0.0"
   }
 }
